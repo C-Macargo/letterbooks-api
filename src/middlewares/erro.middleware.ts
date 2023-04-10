@@ -8,10 +8,10 @@ type ErrorType = {
 }
 
 export function handleApplicationErrors(err : ErrorType , req : Request, res : Response, next : NextFunction) {
-    if (err.name === "ConflictError" || err.name === "DuplicatedEmailError") {
+    if (err.name === "ConflictError" || err.name === "DuplicatedNameError") {
         return res
             .status(httpStatus.CONFLICT)
-            .send({ message: err.message, email: err.email });
+            .send({ message: err.message });
     }
 
     if (err.name === "InvalidCredentialsError") {
