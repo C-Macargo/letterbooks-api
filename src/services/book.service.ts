@@ -1,4 +1,4 @@
-import { NewBook } from "protocols/book.protocol";
+import { NewBook, Book } from "protocols/book.protocol";
 import errors from "../errors/index";
 import { bookRepository } from "repositories/book.repository";
 
@@ -17,8 +17,16 @@ async function read() {
 async function deleteBook(id: number){
     const { rowCount } = await bookRepository.findBookById(id);
     if (!rowCount) throw errors.notFoundError();
-
     await bookRepository.deleteBook(id);
+}
+
+export async function updateBook(id: number, { name, author, rating }: NewBook): Promise<Book> {
+    const { rowCount } = await bookRepository.findBookById(id);
+    if (!rowCount) throw errors.notFoundError();
+    const { rowCount :nameRowCount } = await bookRepository.findByName(name);
+    if (nameRowCount) throw errors.duplicatedNameError(name);
+    const updatedBook = await bookRepository.updateBook({ id, name, author, rating });
+    return updatedBook;
 }
 
 
@@ -26,5 +34,6 @@ async function deleteBook(id: number){
 export default{
     create,
     read,
-    deleteBook
+    deleteBook,
+    updateBook
 }

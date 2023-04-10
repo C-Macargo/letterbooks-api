@@ -33,9 +33,31 @@ async function deleteBook(req: Request, res: Response, next: NextFunction) {
     }
 }
 
+export async function updateBook(
+	req: Request,
+	res: Response,
+	next: NextFunction
+) {
+	const { id } = req.params;
+	const idNumber = parseInt(id, 10);
+	const { name, author, rating } = req.body as NewBook;
+
+	try {
+		const updatedBook = await bookService.updateBook(idNumber, {
+			name,
+			author,
+			rating,
+		});
+		return res.json(updatedBook);
+	} catch (err) {
+		next(err);
+	}
+}
+
 export default {
     createBook,
     getBooks,
-    deleteBook
+    deleteBook,
+    updateBook
 }
 

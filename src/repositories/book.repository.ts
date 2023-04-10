@@ -17,21 +17,31 @@ async function createBook({ name, author, rating } : NewBook) : Promise<QueryRes
     return result;
     }
 
-    async function findBooks() : Promise<QueryResult<Book>>{
+async function findBooks() : Promise<QueryResult<Book>>{
         return await db.query(`SELECT name,author,rating FROM books;`)
     }
 
-    async function findBookById(id: number) : Promise<QueryResult<CheckId>>{
+async function findBookById(id: number) : Promise<QueryResult<CheckId>>{
         return await db.query(
             `SELECT * FROM books WHERE id=$1`,
             [id]
-        )
+        );
     }
 
-    async function deleteBook(id: number){
+async function deleteBook(id: number){
         return await db.query(`DELETE FROM books WHERE id=$1`,
         [id]);
     }
+
+    async function updateBook({ id, name, author, rating }: Book): Promise<Book> {
+        const { rows } = await db.query(
+          'UPDATE books SET name = $2, author = $3, rating = $4 WHERE id = $1 RETURNING *',
+            [id, name, author, rating]
+        );
+        return rows[0];
+    }
+
+
 
 
 export const bookRepository = {
@@ -39,5 +49,6 @@ export const bookRepository = {
     createBook,
     findBooks,
     findBookById,
-    deleteBook
+    deleteBook,
+    updateBook
 }
