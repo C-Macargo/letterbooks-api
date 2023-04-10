@@ -1,5 +1,5 @@
 import { db } from "../config/database.connection.js";
-import { NewBook, Book } from "protocols/book.protocol.js";
+import { NewBook, Book,CheckId } from "protocols/book.protocol.js";
 import { QueryResult } from "pg";
 
 async function findByName(name : string) : Promise<QueryResult<Book>>{
@@ -21,9 +21,23 @@ async function createBook({ name, author, rating } : NewBook) : Promise<QueryRes
         return await db.query(`SELECT name,author,rating FROM books;`)
     }
 
+    async function findBookById(id: number) : Promise<QueryResult<CheckId>>{
+        return await db.query(
+            `SELECT * FROM books WHERE id=$1`,
+            [id]
+        )
+    }
+
+    async function deleteBook(id: number){
+        return await db.query(`DELETE FROM books WHERE id=$1`,
+        [id]);
+    }
+
 
 export const bookRepository = {
     findByName,
     createBook,
-    findBooks
+    findBooks,
+    findBookById,
+    deleteBook
 }

@@ -14,7 +14,17 @@ async function read() {
     return rows;
 }
 
+async function deleteBook(id: number){
+    const { rowCount } = await bookRepository.findBookById(id);
+    if (!rowCount) throw errors.notFoundError();
+
+    await bookRepository.deleteBook(id);
+}
+
+
+
 export default{
     create,
-    read
+    read,
+    deleteBook
 }

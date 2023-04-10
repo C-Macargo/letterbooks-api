@@ -22,8 +22,20 @@ async function getBooks(req: Request, res: Response, next: NextFunction) {
     }
 }
 
+async function deleteBook(req: Request, res: Response, next: NextFunction) {
+    const { id } = req.params;
+    const idNumber = parseFloat(id); 
+    try {
+        await bookService.deleteBook(idNumber)
+        return res.sendStatus(204)
+    } catch (err) {
+        next(err);
+    }
+}
+
 export default {
     createBook,
-    getBooks
+    getBooks,
+    deleteBook
 }
 

@@ -11,3 +11,6 @@ export type NewBook = {
     rating: number,
 }
 
+export type CheckId = {
+    id: number,
+}
