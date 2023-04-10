@@ -8,6 +8,13 @@ async function create({ name, author, rating}: NewBook) {
     await bookRepository.createBook({ name, author, rating })
 }
 
+async function read() {
+    const { rows, rowCount } = await bookRepository.findBooks();
+    if (!rowCount) throw errors.notFoundError();
+    return rows;
+}
+
 export default{
-    create
+    create,
+    read
 }

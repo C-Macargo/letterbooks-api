@@ -17,7 +17,13 @@ async function createBook({ name, author, rating } : NewBook) : Promise<QueryRes
     return result;
     }
 
+    async function findBooks() : Promise<QueryResult<Book>>{
+        return await db.query(`SELECT name,author,rating FROM books;`)
+    }
+
+
 export const bookRepository = {
     findByName,
-    createBook
+    createBook,
+    findBooks
 }

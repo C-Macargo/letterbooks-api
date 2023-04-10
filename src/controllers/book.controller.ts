@@ -13,7 +13,17 @@ async function createBook(req: Request, res: Response, next: NextFunction) {
     }
 }
 
+async function getBooks(req: Request, res: Response, next: NextFunction) {
+    try {
+        const books = await bookService.read();
+        return res.send({ books })
+    } catch (err) {
+        next(err);
+    }
+}
+
 export default {
-    createBook
+    createBook,
+    getBooks
 }
 
