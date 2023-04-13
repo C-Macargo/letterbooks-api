@@ -1,6 +1,6 @@
 export type Book = {
     id: number,
-    name: string,
+    name: string | null;
     author: string,
     rating: number,
 }
